@@ -1,19 +1,19 @@
-#Servir la imagen del backend co maven 
- FROM maven:3.9.9-eclipse-termuri-21
+# Servir la imagen del backend con Maven
+FROM maven:3.9.9-eclipse-temurin-21  
 
- #Establecer el directoprio de trabajo
-  WORKDIR  /app
+# Establecer el directorio de trabajo
+WORKDIR /app
 
-  #Copia todos los archivos del proyecto  en el directorio del trabajo 
-   COPY . .
+# Copiar todos los archivos del proyecto al directorio de trabajo
+COPY . .
 
-   #Ejecutar 2 comandos 
-   #1.-Limpiar y controlar el jar del backend
-   #2.-Copiar el jar resultante al directorio de trabajo
-   RUN mvn clan package -DskipTests && cp target/*.jar app.jar
+# Ejecutar los comandos:
+# 1. Limpiar y compilar el proyecto generando el JAR (sin ejecutar tests)
+# 2. Copiar el JAR resultante al directorio de trabajo con el nombre app.jar
+RUN mvn clean package -DskipTests && cp target/*.jar app.jar  # ✅ 'clean' estaba mal escrito como 'clan'
 
-   #Exponer la imagen en el puerto
-   EXPOSE 8081
+# Exponer el puerto donde correrá la app
+EXPOSE 8081
 
-   #Ejecutar el comando par servir el jar
-   ENTRYPOINT [ "java","-jar","app.jar" ]
+# Ejecutar el comando para servir el JAR
+ENTRYPOINT ["java", "-jar", "app.jar"]
