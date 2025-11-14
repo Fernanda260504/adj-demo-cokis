@@ -1,29 +1,22 @@
-#Etapa 1 (build) : Compilacion de los recursos
+# Etapa 1: build
 FROM node:20 AS build
-
-#establecer el directorio de trabajo 
 WORKDIR /app
-
-#package-lock.json ,packge.json
 COPY package*.json ./
+RUN npm install
+COPY . .
 
-#Funciona paragnerar el node_modules
-RUN npm install 
-#/client/*-> /app/*
-COPY . . 
+ARG API_HOST
+ARG API_BASE
+ARG API_PORT
 
-#Funciona para generar la carpeta /dist
+ENV VITE_API_HOST=$API_HOST
+ENV VITE_API_BASE=$API_BASE
+ENV VITE_API_PORT=$API_PORT
+
 RUN npm run build
 
-#Etapa 2 :Construccion de la imagen 
-FROM nginx:alpine 
-#Servir todos los recursos generados en la etapa anterior en la imagen 
-
+# Etapa 2: nginx
+FROM nginx:alpine
 COPY --from=build /app/dist /usr/share/nginx/html
-
-#Exponer la imagen en el puerto
 EXPOSE 80
-
-#Levantar el nginx
-
-CMD ["nginx","-g","demon off;"]
+CMD ["nginx", "-g", "daemon off;"]

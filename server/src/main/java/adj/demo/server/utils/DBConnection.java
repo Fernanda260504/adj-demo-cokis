@@ -21,8 +21,8 @@ public class DBConnection {
     @Value("${db.user}")
     private String user;
 
-    @Value("${db.password}")
-    private String password;
+    @Value("${db.pass}")
+    private String pass;
 
     @Bean
     public DataSource getConnection(){
@@ -30,7 +30,7 @@ public class DBConnection {
         source.setDriverClassName("com.mysql.jdbc.Driver");
         source.setUrl("jdbc:mysql://" + host + ":" + port + "/" + name);
         source.setUsername(user);
-        source.setPassword(password);
+        source.setPassword(pass);
 
         return source;
     }
